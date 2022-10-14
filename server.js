@@ -19,23 +19,125 @@ const userData = [
     id: 1,
     usageData: [
       {
-        label: "production",
+        label: "currentProduction",
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "autarchy",
+        label: "networkImport",
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "network",
+        label: "networkExport",
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "usage",
+        label: "currentConsumption",
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "vehicleCharging",
+        label: "charged",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "discharged",
+        value: getRandomFloat(0, 100, 1),
+      },
+    ],
+    dailyProduction: [
+      {
+        label: "00",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "01",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "02",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "03",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "04",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "05",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "06",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "07",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "08",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "09",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "10",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "11",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "12",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "13",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "14",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "15",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "16",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "17",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "18",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "19",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "20",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "21",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "22",
+        value: getRandomFloat(0, 100, 1),
+      },
+      {
+        label: "23",
         value: getRandomFloat(0, 100, 1),
       },
     ],
@@ -52,6 +154,7 @@ const schema = buildSchema(`
     address: String
     id: Int
     usageData: [UsageData]
+    dailyProduction: [UsageData]
   }
 
   type UsageData {
@@ -63,11 +166,26 @@ const schema = buildSchema(`
     user(id: Int!): User
     users: [User]
   }
+
+  type Mutation {
+    setUserFirstname(id: Int!, newFirstName: String!): User
+    setUserLastname(id: Int!, newLastName: String!): User
+  }
 `);
 
 const root = {
   user: getUser,
   users: getUsers,
+  setUserFirstname: args => {
+    const foundUser = getUser(args);
+    foundUser.firstName = args.newFirstName;
+    return foundUser;
+  },
+  setUserLastname: args => {
+    const foundUser = getUser(args);
+    foundUser.lastName = args.newLastName;
+    return foundUser;
+  },
 };
 
 const app = express();
@@ -81,5 +199,5 @@ app.use(
   })
 );
 
-app.listen(8000);
+app.listen(PORT);
 console.log(`Running a GraphQL API server at http://localhost:${PORT}/graphql`);
