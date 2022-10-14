@@ -145,14 +145,16 @@ const getUser = args => {
   foundUser.usageData.forEach(datapoint => {
     datapoint.value = getRandomFloat(0, 100, 1);
   });
-  for (let i = 0; i < 23; i++) {
-    const distanceFromNow = 23 - i;
-    const timestamp = Date.now() - distanceFromNow * 3600 * 1000;
-    foundUser.dailyProduction[i].label = timestamp;
+  if (foundUser.dailyProduction[0].label === "00") {
+    for (let i = 0; i < 23; i++) {
+      const distanceFromNow = 23 - i;
+      const timestamp = Date.now() - distanceFromNow * 3600 * 1000;
+      foundUser.dailyProduction[i].label = timestamp;
+    }
+    foundUser.dailyProduction.forEach(datapoint => {
+      datapoint.value = getRandomFloat(0, 100, 1);
+    });
   }
-  foundUser.dailyProduction.forEach(datapoint => {
-    datapoint.value = getRandomFloat(0, 100, 1);
-  });
   return foundUser;
 };
 
