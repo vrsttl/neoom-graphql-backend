@@ -136,10 +136,6 @@ const userData = [
         label: "22",
         value: getRandomFloat(0, 100, 1),
       },
-      {
-        label: "23",
-        value: getRandomFloat(0, 100, 1),
-      },
     ],
   },
 ];
@@ -147,6 +143,14 @@ const userData = [
 const getUser = args => {
   const foundUser = userData.find(user => user.id === args.id);
   foundUser.usageData.forEach(datapoint => {
+    datapoint.value = getRandomFloat(0, 100, 1);
+  });
+  for (let i = 0; i < 23; i++) {
+    const distanceFromNow = 23 - i;
+    const timestamp = Date.now() - distanceFromNow * 3600 * 1000;
+    foundUser.dailyProduction[i].label = timestamp;
+  }
+  foundUser.dailyProduction.forEach(datapoint => {
     datapoint.value = getRandomFloat(0, 100, 1);
   });
   return foundUser;
