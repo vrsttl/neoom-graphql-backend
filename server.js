@@ -45,95 +45,95 @@ const userData = [
     ],
     dailyProduction: [
       {
-        label: "00",
+        label: 0,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "01",
+        label: 1,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "02",
+        label: 2,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "03",
+        label: 3,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "04",
+        label: 4,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "05",
+        label: 5,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "06",
+        label: 6,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "07",
+        label: 7,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "08",
+        label: 8,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "09",
+        label: 9,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "10",
+        label: 10,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "11",
+        label: 11,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "12",
+        label: 12,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "13",
+        label: 13,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "14",
+        label: 14,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "15",
+        label: 15,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "16",
+        label: 16,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "17",
+        label: 17,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "18",
+        label: 18,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "19",
+        label: 19,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "20",
+        label: 20,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "21",
+        label: 21,
         value: getRandomFloat(0, 100, 1),
       },
       {
-        label: "22",
+        label: 22,
         value: getRandomFloat(0, 100, 1),
       },
     ],
@@ -145,11 +145,11 @@ const getUser = args => {
   foundUser.usageData.forEach(datapoint => {
     datapoint.value = getRandomFloat(0, 100, 1);
   });
-  if (foundUser.dailyProduction[0].label === "00") {
+  if (foundUser.dailyProduction[0].label === 0) {
     for (let i = 0; i < 23; i++) {
       const distanceFromNow = 23 - i;
       const timestamp = Date.now() - distanceFromNow * 3600 * 1000;
-      foundUser.dailyProduction[i].label = timestamp;
+      foundUser.dailyProduction[i].label = +timestamp;
     }
     foundUser.dailyProduction.forEach(datapoint => {
       datapoint.value = getRandomFloat(0, 100, 1);
@@ -181,21 +181,16 @@ const schema = buildSchema(`
   }
 
   type Mutation {
-    setUserFirstname(id: Int!, newFirstName: String!): User
-    setUserLastname(id: Int!, newLastName: String!): User
+    setUserNames(id: Int!, newFirstName: String!, newLastName: String!): User
   }
 `);
 
 const root = {
   user: getUser,
   users: getUsers,
-  setUserFirstname: args => {
+  setUserNames: args => {
     const foundUser = getUser(args);
     foundUser.firstName = args.newFirstName;
-    return foundUser;
-  },
-  setUserLastname: args => {
-    const foundUser = getUser(args);
     foundUser.lastName = args.newLastName;
     return foundUser;
   },
