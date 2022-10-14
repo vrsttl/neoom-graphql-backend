@@ -144,7 +144,14 @@ const userData = [
   },
 ];
 
-const getUser = args => userData.find(user => user.id === args.id);
+const getUser = args => {
+  const foundUser = userData.find(user => user.id === args.id);
+  foundUser.usageData.forEach(datapoint => {
+    datapoint.value = getRandomFloat(0, 100, 1);
+  });
+  return foundUser;
+};
+
 const getUsers = () => userData;
 
 const schema = buildSchema(`
