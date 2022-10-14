@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
+const cors = require("cors");
 const PORT = process.env.PORT;
 
 const getRandomFloat = (min, max, decimals) => {
@@ -41,10 +42,11 @@ const userData = [
   },
 ];
 
-const getUser = id => userData.find(id);
+const getUser = args => userData.find(user => user.id === args.id);
+const getUsers = () => userData;
 
 const schema = buildSchema(`
-  type Query {
+  type User {
     firstName: String
     lastName: String
     address: String
@@ -56,15 +58,22 @@ const schema = buildSchema(`
     label: String
     value: Float 
   }
+
+  type Query {
+    user(id: Int!): User
+    users: [User]
+  }
 `);
 
 const root = {
   user: getUser,
+  users: getUsers,
 };
 
 const app = express();
 app.use(
   "/graphql",
+  cors(),
   graphqlHTTP({
     schema: schema,
     rootValue: root,
@@ -72,18 +81,5 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  const allowedOrigins = ["http://127.0.0.1:3000", "http://localhost:3000"];
-  const { origin } = req.headers;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
-app.listen(4000);
+app.listen(8000);
 console.log(`Running a GraphQL API server at http://localhost:${PORT}/graphql`);
